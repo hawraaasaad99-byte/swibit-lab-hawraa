@@ -1,83 +1,115 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert } from 'react-native';
-import { useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';
-import {api} from '../lib/api'; 
-
+import React from 'react'; 
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, }
+ from 'react-native'; 
+ import { useLogin } from '../features/(auth)/hooks/useLogin';
+ 
 export default function LoginScreen() {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
+   const { email, setEmail, password, setPassword, loading, handleLogin, router, } = useLogin();
+return (
+   <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container} >
+   <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+     <View style={styles.formWrapper}> 
+      <Text style={styles.headerTitle}>Log-in</Text>
+   
+     <View style={styles.inputGroup}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput 
+          style={styles.input}
+          placeholder="Your email id"
+          placeholderTextColor="#aaa"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
+      </View>
 
-  const handleLogin = async () => {
-    if (!username || !password) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
+      <View style={styles.inputGroup}>
+        <Text style={styles.label}>Password</Text>
+        <TextInput 
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#aaa"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+      </View>
 
-    try {
-      setLoading(true);
-      
-      
-      const response = await api.post('/login', {
-        username: username,
-        password: password,
-      });
-
-      
-      const token = response.data.access_token || response.data.token;
-
-      if (token) {
-        // حفظ الـ Token باستخدام expo-secure-store
-        await SecureStore.setItemAsync('userToken', token);
-        
-        Alert.alert('Success', 'Logged in successfully!');
-        
-        
-        router.replace('/(tabs)'); 
-      } else {
-        Alert.alert('Error', 'Token not received from server');
-      }
-    } catch (error: any) {
-      console.error(error);
-      Alert.alert('Login Failed', error.response?.data?.detail || 'Invalid credentials');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <View className="flex-1 justify-center px-6 bg-white">
-      <Text className="text-3xl font-bold text-center mb-8 text-gray-800">Welcome Back</Text>
-      
-      <TextInput
-        className="w-full h-12 border border-gray-300 rounded-lg px-4 mb-4 bg-gray-50 text-black"
-        placeholder="Username"
-        placeholderTextColor="#9ca3af"
-        value={username}
-        onChangeText={setUsername}
-        autoCapitalize="none"
-      />
-
-      <TextInput
-        className="w-full h-12 border border-gray-300 rounded-lg px-4 mb-6 bg-gray-50 text-black"
-        placeholder="Password"
-        placeholderTextColor="#9ca3af"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-
-      <TouchableOpacity
-        className={`w-full h-12 rounded-lg justify-center items-center ${loading ? 'bg-blue-300' : 'bg-blue-600'}`}
+      <TouchableOpacity 
+        style={[styles.mainButton, loading && styles.buttonDisabled]} 
         onPress={handleLogin}
         disabled={loading}
       >
-        <Text className="text-white font-semibold text-lg">
-          {loading ? 'Logging in...' : 'Login'}
-        </Text>
+        {loading ? (
+          <ActivityIndicator color="#fff" />
+        ) : (
+          <Text style={styles.mainButtonText}>Login</Text>
+        )}
       </TouchableOpacity>
+
+      <View style={styles.switchContainer}>
+        <Text style={styles.switchQuestion}>Don't have an account ? </Text>
+        <TouchableOpacity onPress={() => router.push('/signup' as any)}>
+          <Text style={styles.switchActionText}>Sign-up</Text>
+        </TouchableOpacity>
+      </View>
     </View>
-  );
-}
+  </ScrollView>
+</KeyboardAvoidingView>
+); }
+const styles = StyleSheet.create(
+  { container: 
+  { flex: 1,
+     backgroundColor: '#ffffff',
+     }, 
+  scrollContainer: {
+     flexGrow: 1,
+      paddingHorizontal: 28, 
+      paddingVertical: 40, 
+      justifyContent: 'center', },
+       formWrapper: {
+         width: '100%', },
+        headerTitle: { 
+          fontSize: 28,
+           fontWeight: 'bold',
+           color: '#111',
+            marginBottom: 24, 
+          },
+            inputGroup: {
+               marginBottom: 20,
+               },
+             label: {
+               fontSize: 15,
+               fontWeight: '600',
+                color: '#222',
+                 marginBottom: 6, }, 
+                 input: {
+                   fontSize: 14,
+                   color: '#333',
+                   paddingVertical: 8, 
+                   borderBottomWidth: 1,
+                    borderBottomColor: '#d1d8e0', },
+                     mainButton: {
+                       backgroundColor: '#2f3640',
+                       borderRadius: 25,
+                        paddingVertical: 14,
+                         alignItems: 'center',
+                          marginTop: 20,
+                           marginBottom: 20, },
+                            buttonDisabled:{
+                               opacity: 0.7, },
+                             mainButtonText: {
+                               color: '#ffffff', 
+                              fontSize: 16,
+                               fontWeight: 'bold', }, 
+                              switchContainer: { 
+                                flexDirection: 'row', 
+                                justifyContent: 'center', 
+                                alignItems: 'center', },
+                                 switchQuestion: {
+                                   color: '#57606f', fontSize: 14, },
+                                  switchActionText: { 
+                                    color: '#2f3640', 
+                                    fontSize: 14, 
+                                    fontWeight: 'bold', }, }); 

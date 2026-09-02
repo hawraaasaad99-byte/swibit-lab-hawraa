@@ -1,115 +1,60 @@
-import React from 'react'; 
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView, ActivityIndicator, }
- from 'react-native'; 
- import { useLogin } from '../features/(auth)/hooks/useLogin';
- 
+import React from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { useLogin } from '../features/(auth)/hooks/useLogin';
+import { Field } from '@/shared/components/field';
+import { SubmitButton } from '@/shared/components/submitbutton';
+
 export default function LoginScreen() {
-   const { email, setEmail, password, setPassword, loading, handleLogin, router, } = useLogin();
-return (
-   <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container} >
-   <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-     <View style={styles.formWrapper}> 
-      <Text style={styles.headerTitle}>Log-in</Text>
-   
-     <View style={styles.inputGroup}>
-        <Text style={styles.label}>Email</Text>
-        <TextInput 
-          style={styles.input}
-          placeholder="Your email id"
-          placeholderTextColor="#aaa"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-      </View>
+  const { email, setEmail, password, setPassword, loading, handleLogin, router, } = useLogin();
 
-      <View style={styles.inputGroup}>
-        <Text style={styles.label}>Password</Text>
-        <TextInput 
-          style={styles.input}
-          placeholder="Password"
-          placeholderTextColor="#aaa"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-      </View>
+  return (
+    <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'} style={styles.container}>
+      <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
+        <View style={styles.formWrapper}>
+          <Text style={styles.headerTitle}>Log-in</Text>
 
-      <TouchableOpacity 
-        style={[styles.mainButton, loading && styles.buttonDisabled]} 
-        onPress={handleLogin}
-        disabled={loading}
-      >
-        {loading ? (
-          <ActivityIndicator color="#fff" />
-        ) : (
-          <Text style={styles.mainButtonText}>Login</Text>
-        )}
-      </TouchableOpacity>
+          <Field
+            label="Email"
+            placeholder="Your email id"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            value={email}
+            onChangeText={setEmail}
+          />
 
-      <View style={styles.switchContainer}>
-        <Text style={styles.switchQuestion}>Don't have an account ? </Text>
-        <TouchableOpacity onPress={() => router.push('/signup' as any)}>
-          <Text style={styles.switchActionText}>Sign-up</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
-  </ScrollView>
-</KeyboardAvoidingView>
-); }
-const styles = StyleSheet.create(
-  { container: 
-  { flex: 1,
-     backgroundColor: '#ffffff',
-     }, 
-  scrollContainer: {
-     flexGrow: 1,
-      paddingHorizontal: 28, 
-      paddingVertical: 40, 
-      justifyContent: 'center', },
-       formWrapper: {
-         width: '100%', },
-        headerTitle: { 
-          fontSize: 28,
-           fontWeight: 'bold',
-           color: '#111',
-            marginBottom: 24, 
-          },
-            inputGroup: {
-               marginBottom: 20,
-               },
-             label: {
-               fontSize: 15,
-               fontWeight: '600',
-                color: '#222',
-                 marginBottom: 6, }, 
-                 input: {
-                   fontSize: 14,
-                   color: '#333',
-                   paddingVertical: 8, 
-                   borderBottomWidth: 1,
-                    borderBottomColor: '#d1d8e0', },
-                     mainButton: {
-                       backgroundColor: '#2f3640',
-                       borderRadius: 25,
-                        paddingVertical: 14,
-                         alignItems: 'center',
-                          marginTop: 20,
-                           marginBottom: 20, },
-                            buttonDisabled:{
-                               opacity: 0.7, },
-                             mainButtonText: {
-                               color: '#ffffff', 
-                              fontSize: 16,
-                               fontWeight: 'bold', }, 
-                              switchContainer: { 
-                                flexDirection: 'row', 
-                                justifyContent: 'center', 
-                                alignItems: 'center', },
-                                 switchQuestion: {
-                                   color: '#57606f', fontSize: 14, },
-                                  switchActionText: { 
-                                    color: '#2f3640', 
-                                    fontSize: 14, 
-                                    fontWeight: 'bold', }, }); 
+          <Field
+            label="Password"
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+
+          <SubmitButton
+            loading={loading}
+            label="Login"
+            onPress={handleLogin}
+          />
+
+          <View style={styles.switchContainer}>
+            <Text style={styles.switchQuestion}>Don't have an account ? </Text>
+            <TouchableOpacity onPress={() => router.push('/signup')}>
+              <Text style={styles.switchActionText}>Sign-up</Text>
+            </TouchableOpacity>
+          </View>
+
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1, backgroundColor: '#ffffff' },
+  scrollContainer: { flexGrow: 1, paddingHorizontal: 28, paddingVertical: 40, justifyContent: 'center' },
+  formWrapper: { width: '100%' },
+  headerTitle: { fontSize: 28, fontWeight: 'bold', color: '#111', marginBottom: 24 },
+  switchContainer: { flexDirection: 'row', justifyContent: 'center', alignItems: 'center', marginTop: 20 },
+  switchQuestion: { color: '#57606f', fontSize: 14 },
+  switchActionText: { color: '#2f3640', fontSize: 14, fontWeight: 'bold' },
+});

@@ -21,9 +21,9 @@ try {
   await signupApi({ username, email, password });
 
   Alert.alert('Success', 'Account created successfully!');
-  router.replace('/login' as any);
-} catch (error: any) {
-  Alert.alert('Error', error.message || 'Failed to connect to the server');
+  router.replace('/login');
+} catch (error:unknown){
+  const errorMessage = error instanceof Error ? error.message : 'failed to connect to the server';
 } finally {
   setLoading(false);
 }

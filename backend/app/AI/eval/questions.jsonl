@@ -1,0 +1,15 @@
+{"question": "What is the policy regarding remote work and VPN?", "expected_keyword": "VPN"}
+{"question": "What are the core principles of AI ethics outlined in our guidelines?", "expected_keyword": "ethics"}
+{"question": "How should client support handle escalated angry customers?", "expected_keyword": "support"}
+{"question": "What tools or automated analysis are required during a code review?", "expected_keyword": "analysis"}
+{"question": "What are the strict rules regarding data privacy and user personal records?", "expected_keyword": "privacy"}
+{"question": "What is the policy on subscription renewals and billing cycles?", "expected_keyword": "billing"}
+{"question": "Are employees allowed to use unapproved AI models for company code?", "expected_keyword": "AI"}
+{"question": "What steps must be followed during code review before merging?", "expected_keyword": "merged"}
+{"question": "How are customer support tickets prioritized according to our service level agreement?", "expected_keyword": "support"}
+{"question": "What is the procedure for handling user data privacy breaches?", "expected_keyword": "data"}
+{"question": "Can clients request a refund under the subscription and billing policy?", "expected_keyword": "subscription"}
+{"question": "What guidelines govern fair use and bias in AI ethics?", "expected_keyword": "ethics"}
+{"question": "What is the required protocol for remote work cybersecurity?", "expected_keyword": "remote work"}
+{"question": "What specific checks should a code review include for leaked secrets?", "expected_keyword": "secrets"}
+{"question": "How long does the client support team retain chat histories?", "expected_keyword": "support"}

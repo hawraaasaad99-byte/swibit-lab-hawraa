@@ -4,6 +4,7 @@ from app.routers import users, tasks
 from app.core.database import Base, engine
 from app.core.logging import logger
 from fastapi.middleware.cors import CORSMiddleware
+from app.api.assistant import router as assistant_router
 
 
 @asynccontextmanager
@@ -25,6 +26,7 @@ app.add_middleware(
 
 app.include_router(users.router)
 app.include_router(tasks.router)
+app.include_router(assistant_router, prefix="/api")
 
 @app.get("/health")
 def health():

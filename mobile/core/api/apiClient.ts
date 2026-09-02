@@ -13,7 +13,8 @@ if (response.status === 401) {
 }
 
 return response;
-} catch (error: any) { console.error('API Client Network Error:', error);
+} catch (error: unknown){
+   console.error('API Client Network Error:', error);
 Alert.alert(
   'Connection Error',
   'Unable to connect to the server. Please check if the backend is running.'

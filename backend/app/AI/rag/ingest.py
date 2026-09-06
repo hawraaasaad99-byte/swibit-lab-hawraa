@@ -1,4 +1,4 @@
-import os
+
 from pathlib import Path
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
@@ -26,7 +26,7 @@ def ingest_policies():
     
     chunks = text_splitter.split_documents(documents)
 
-    embeddings = OllamaEmbeddings(model="nomic-embed-text") # أو الموديل المتوفر عندك في أولاما
+    embeddings = OllamaEmbeddings(model="nomic-embed-text")
 
     vector_store = Chroma.from_documents(
         documents=chunks,

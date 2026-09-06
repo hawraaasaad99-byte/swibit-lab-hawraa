@@ -32,7 +32,7 @@ def ask_assistant(payload: AskRequest):
     try:
         query = payload.question
         answer = answer_user_query(query)
-        docs = search_policies(query)
+        docs = search_policies(query, k=3)
         citations = []
         for doc in docs:
             source = doc.metadata.get("source", "unknown_policy.md")

@@ -1,4 +1,4 @@
-import json
+
 from pathlib import Path
 from pydantic import BaseModel, Field
 import ollama
@@ -34,7 +34,15 @@ JSON Response:
     response = ollama.chat(
         model='codellama',
         messages=[
-            {'role': 'user', 'content': full_prompt},
+            {
+                "role": "system",
+                "content": system_prompt
+
+            },
+            {
+                "role": "user",
+                "content": user_message
+            }
         ],
         options={'temperature': 0.1}
     )

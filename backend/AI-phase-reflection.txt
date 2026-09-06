@@ -1,0 +1,33 @@
+1. Overview
+Over the course of this module, I designed and built a local AI Assistant featuring a Structured Extractor and a complete
+ Retrieval-Augmented Generation (RAG) pipeline. The system integrates Python, LangChain, ChromaDB, and local LLMs via Ollama to 
+ process user messages and query company policies securely and accurately.
+
+
+2. Architecture Decisions
+Choosing the right architectural components was critical for ensuring performance, privacy, and maintainability:
+ Local LLM & Embeddings (Ollama): I opted for Ollama running ⁠codellama⁠ and ⁠nomic-embed-text⁠ locally. This ensures data privacy,
+  zero API costs, and reliable execution without relying on external cloud providers.
+ Vector Database (ChromaDB): Chroma was selected as a lightweight, embedded vector store. It allows seamless persistence on disk 
+ (⁠CHROMA_DIR⁠) and fast similarity search without the overhead of managing a complex, standalone database server.
+ Chunking Strategy: For the RAG ingestion pipeline, I implemented ⁠RecursiveCharacterTextSplitter⁠ with a ⁠chunk_size⁠ of 600 and an 
+ overlap of 80. By prioritizing separators like Markdown headers (⁠\n## ⁠, ⁠\n### ⁠), the system preserves structural boundaries, 
+ preventing mid-sentence cuts and maintaining contextual integrity.
+
+3. Hardest Technical Problem
+The most challenging obstacle I encountered was handling inconsistent model outputs and response grounding during the RAG generation
+ phase:
+ The Problem: Initially, the LLM occasionally suffered from hallucination or attempted to answer user queries using general 
+ knowledge rather than adhering strictly to the retrieved document context (⁠Context⁠). Additionally, parsing structured extractions
+ sometimes failed when the model wrapped JSON outputs in markdown code blocks.
+ The Solution: To fix this, I enforced strict constraints at two levels. First, I lowered the generation ⁠temperature⁠ to ⁠0.1⁠ and added 
+ explicit system instructions ("If you don't know the answer based on the context, say that you don't know") to anchor the model 
+ strictly to the retrieved chunks. Second, for the structured extraction service, I added data-cleaning steps to strip markdown code 
+ fences before validating the payload against Pydantic schemas (⁠BaseModel⁠ and ⁠Literal⁠), ensuring type safety and robust error 
+ handling.
+
+
+4. Conclusion
+This project bridged theoretical concepts with real-world engineering. Implementing a full RAG cycle—from ingestion and chunking to
+ vector storage, retrieval, and constrained generation—deepened my understanding of building reliable, production-ready AI 
+ applications.

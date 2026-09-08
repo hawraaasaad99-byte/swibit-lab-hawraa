@@ -13,8 +13,8 @@ const getStoredToken = () => {
 };
 
 export const useAuthStore = create<AuthState>((set) => ({
-  token: getStoredToken(),
-  isAuthenticated: !!getStoredToken(),
+  token: null,
+  isAuthenticated: false,
 
   setToken: (token) => {
     if (typeof window !== 'undefined' && window.localStorage) {
